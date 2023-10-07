@@ -66,218 +66,223 @@ class Uploaded_files extends StatelessWidget {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              const Padding(
-                padding: EdgeInsets.fromLTRB(10, 20, 0, 10),
-                child: Text(
-                  "Uploaded Files",
-                  textAlign: TextAlign.start,
-                  overflow: TextOverflow.clip,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontStyle: FontStyle.normal,
-                    fontSize: 18,
-                    color: Color(0xffd6fbe8),
-                  ),
-                ),
-              ),
-              GridView(
-                padding: const EdgeInsets.all(8),
-                shrinkWrap: true,
-                scrollDirection: Axis.vertical,
-                physics: const ScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  childAspectRatio: 0.9,
-                ),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minWidth: 320, maxWidth: 620),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
                 children: [
-                  Container(
-                    margin: const EdgeInsets.all(0),
-                    padding: const EdgeInsets.all(0),
-                    width: 200,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      color: const Color(0xff353535),
-                      shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    child: const Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.all(5),
-                          child:
-
-                              ///***If you have exported images you must have to copy those images in assets/images directory.
-                              Image(
-                            image: AssetImage("assets/images/Untitled-1.png"),
-                            height: 100,
-                            width: 140,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                        Text(
-                          "File_name",
-                          textAlign: TextAlign.start,
-                          overflow: TextOverflow.clip,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontStyle: FontStyle.normal,
-                            fontSize: 14,
-                            color: Color(0xffffffff),
-                          ),
-                        ),
-                      ],
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(10, 20, 0, 10),
+                    child: Text(
+                      "Uploaded Files",
+                      textAlign: TextAlign.start,
+                      overflow: TextOverflow.clip,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontStyle: FontStyle.normal,
+                        fontSize: 18,
+                        color: Color(0xffd6fbe8),
+                      ),
                     ),
                   ),
-                  Container(
-                    margin: const EdgeInsets.all(0),
-                    padding: const EdgeInsets.all(0),
-                    width: 200,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      color: const Color(0xff353535),
-                      shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.circular(10.0),
+                  GridView(
+                    padding: const EdgeInsets.all(8),
+                    shrinkWrap: true,
+                    scrollDirection: Axis.vertical,
+                    physics: const ScrollPhysics(),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                      childAspectRatio: 0.9,
                     ),
-                    child: const Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.all(5),
-                          child:
-
-                              ///***If you have exported images you must have to copy those images in assets/images directory.
-                              Image(
-                            image: AssetImage("assets/images/Untitled-1.png"),
-                            height: 100,
-                            width: 140,
-                            fit: BoxFit.contain,
-                          ),
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.all(0),
+                        padding: const EdgeInsets.all(0),
+                        width: 200,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          color: const Color(0xff353535),
+                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.circular(10.0),
                         ),
-                        Text(
-                          "File_name",
-                          textAlign: TextAlign.start,
-                          overflow: TextOverflow.clip,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontStyle: FontStyle.normal,
-                            fontSize: 14,
-                            color: Color(0xffffffff),
-                          ),
+                        child: const Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.all(5),
+                              child:
+        
+                                  ///***If you have exported images you must have to copy those images in assets/images directory.
+                                  Image(
+                                image: AssetImage("assets/images/Untitled-1.png"),
+                                height: 100,
+                                width: 140,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                            Text(
+                              "File_name",
+                              textAlign: TextAlign.start,
+                              overflow: TextOverflow.clip,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontStyle: FontStyle.normal,
+                                fontSize: 14,
+                                color: Color(0xffffffff),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.all(0),
-                    padding: const EdgeInsets.all(0),
-                    width: 200,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      color: const Color(0xff353535),
-                      shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    child: const Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.all(5),
-                          child:
-
-                              ///***If you have exported images you must have to copy those images in assets/images directory.
-                              Image(
-                            image: AssetImage("assets/images/Untitled-1.png"),
-                            height: 100,
-                            width: 140,
-                            fit: BoxFit.contain,
-                          ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.all(0),
+                        padding: const EdgeInsets.all(0),
+                        width: 200,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          color: const Color(0xff353535),
+                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.circular(10.0),
                         ),
-                        Text(
-                          "File_name",
-                          textAlign: TextAlign.start,
-                          overflow: TextOverflow.clip,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontStyle: FontStyle.normal,
-                            fontSize: 14,
-                            color: Color(0xffffffff),
-                          ),
+                        child: const Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.all(5),
+                              child:
+        
+                                  ///***If you have exported images you must have to copy those images in assets/images directory.
+                                  Image(
+                                image: AssetImage("assets/images/Untitled-1.png"),
+                                height: 100,
+                                width: 140,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                            Text(
+                              "File_name",
+                              textAlign: TextAlign.start,
+                              overflow: TextOverflow.clip,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontStyle: FontStyle.normal,
+                                fontSize: 14,
+                                color: Color(0xffffffff),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.all(0),
-                    padding: const EdgeInsets.all(0),
-                    width: 200,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      color: const Color(0xff353535),
-                      shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    child: const Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.all(5),
-                          child:
-
-                              ///***If you have exported images you must have to copy those images in assets/images directory.
-                              Image(
-                            image: AssetImage("assets/images/Untitled-1.png"),
-                            height: 100,
-                            width: 140,
-                            fit: BoxFit.contain,
-                          ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.all(0),
+                        padding: const EdgeInsets.all(0),
+                        width: 200,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          color: const Color(0xff353535),
+                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.circular(10.0),
                         ),
-                        Text(
-                          "File_name",
-                          textAlign: TextAlign.start,
-                          overflow: TextOverflow.clip,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontStyle: FontStyle.normal,
-                            fontSize: 14,
-                            color: Color(0xffffffff),
-                          ),
+                        child: const Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.all(5),
+                              child:
+        
+                                  ///***If you have exported images you must have to copy those images in assets/images directory.
+                                  Image(
+                                image: AssetImage("assets/images/Untitled-1.png"),
+                                height: 100,
+                                width: 140,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                            Text(
+                              "File_name",
+                              textAlign: TextAlign.start,
+                              overflow: TextOverflow.clip,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontStyle: FontStyle.normal,
+                                fontSize: 14,
+                                color: Color(0xffffffff),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.all(0),
-                    padding: const EdgeInsets.all(0),
-                    width: 200,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      color: const Color(0xff353535),
-                      shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.all(0),
+                        padding: const EdgeInsets.all(0),
+                        width: 200,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          color: const Color(0xff353535),
+                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: const Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.all(5),
+                              child:
+        
+                                  ///***If you have exported images you must have to copy those images in assets/images directory.
+                                  Image(
+                                image: AssetImage("assets/images/Untitled-1.png"),
+                                height: 100,
+                                width: 140,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                            Text(
+                              "File_name",
+                              textAlign: TextAlign.start,
+                              overflow: TextOverflow.clip,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontStyle: FontStyle.normal,
+                                fontSize: 14,
+                                color: Color(0xffffffff),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.all(0),
+                        padding: const EdgeInsets.all(0),
+                        width: 200,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          color: const Color(0xff353535),
+                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
+            ),
           ),
         ),
       ),
