@@ -7,12 +7,16 @@ import io
 from uuid import uuid4
 import uvicorn
 import os
+from pydantic import BaseModel
+
 
 yolo = None
 classifier = None
 
 app = FastAPI(title="Recognition of railway car numbers")
 
+class CheckText(BaseModel):
+    text: str
 
 origins = [
     "*",
@@ -35,8 +39,9 @@ def startup_event():
     classifier = Classifier()
     classifier.get_model_from_file(os.path.join('ml', 'classifier_efficient_net_95-8acc.pt'))
 
-
-
+@app.post('/text')
+def send_text(value: CheckText):
+    return {'data': value}
 
 @app.post('/get_result')
 def main(files: list[UploadFile]):
