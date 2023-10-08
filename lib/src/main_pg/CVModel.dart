@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+// import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +35,7 @@ Future<void> uploadImage() async {
 
     final json = {'image': base64Image};
     final response = await http.post(
-      Uri.parse('http://0.0.0.0:8000/get_result/'),
+      Uri.parse('http://172.20.192.1:8080/get_result/'),
       headers: {HttpHeaders.contentTypeHeader: 'application/json'},
       body: jsonEncode(json),
     );
