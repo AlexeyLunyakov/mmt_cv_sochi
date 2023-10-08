@@ -1,14 +1,14 @@
-from fastapi import FastAPI, UploadFile
+from typing import List
+from fastapi import FastAPI, Form, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from ml.classiffier import Classifier
 from ultralytics import YOLO
 from PIL import Image
 import io
 from uuid import uuid4
-import uvicorn
 import os
 from pydantic import BaseModel
-
+import base64
 
 yolo = None
 classifier = None
@@ -17,6 +17,9 @@ app = FastAPI(title="Recognition of railway car numbers")
 
 class CheckText(BaseModel):
     text: str
+
+class Image64(BaseModel):
+    files: List[str]
 
 origins = [
     "*",
@@ -44,7 +47,7 @@ def send_text(value: CheckText):
     return {'data': value}
 
 @app.post('/get_result')
-def main(files: list[UploadFile]):
+def main(files: List[UploadFile]):
     for file in files:
         session_id = uuid4()
         image = Image.open(io.BytesIO(file.file.read()))
@@ -55,5 +58,17 @@ def main(files: list[UploadFile]):
         # image = decode_image(frombuffer(file.file.read()))
     return {"data": ['bewick', 'is', 'good']}
 
-# if __name__ == "__main__":
-#     uvicorn.run("main:app", host="0.0.0.0", port=8000, log_level="info", reload=True)
+
+@app.post('/get_result_64')
+def main_64(file: Image64):
+    images = file.files
+    for file in images:
+        session_id = uuid4()
+        image_as_bytes = str.encode(file)  # convert string to bytes
+        img_recovered = base64.b64decode(image_as_bytes)  # decode base64string
+        image = Image.open(io.BytesIO(img_recovered))
+        # image = transforms.ToTensor()(image)
+        results = yolo.predict(image)
+        print(results)
+        for el in results:
+            el.save_crop(f"C:\\Users\\kalin\\Desktop\\Hacatons\\mmt_cv_sochi\\BackEnd\\swans\\{session_id}\\")
