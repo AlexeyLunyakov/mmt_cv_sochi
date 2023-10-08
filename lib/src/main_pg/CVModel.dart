@@ -1,30 +1,50 @@
+import 'dart:convert';
+import 'dart:io';
+import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:mmt_cv_sochi/src/login/ProfileScreen.dart';
 import 'package:mmt_cv_sochi/src/main_pg/Left_Menu.dart';
 import 'package:mmt_cv_sochi/src/main_pg/MEGAMEN.dart';
 import 'package:mmt_cv_sochi/src/main_pg/Uploaded_files.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:file_picker/file_picker.dart'; 
-import 'package:open_file/open_file.dart';
+// import 'package:file_picker/file_picker.dart'; 
+// import 'package:open_file/open_file.dart';
 
 
-void _openFile(PlatformFile file) { 
-	OpenFile.open(file.path); 
-}
+// void _openFile(PlatformFile file) { 
+// 	OpenFile.open(file.path); 
+// }
 
-void _pickFile() async { 
-	// opens storage to pick files and the picked file or files 
-	// are assigned into result and if no file is chosen result is null. 
-	// you can also toggle "allowMultiple" true or false depending on your need 
-	final result = await FilePicker.platform.pickFiles(allowMultiple: true); 
+// void _pickFile() async { 
+// 	final result = await FilePicker.platform.pickFiles(allowMultiple: true); 
+// 	if (result == null) return; 
+// 	final file = result.files.first; 
+// 	_openFile(file); 
+// }
 
-	// if no file is picked 
-	if (result == null) return; 
+// Выбор изображения
+Future<void> uploadImage() async {
+  final picker = ImagePicker();
+  final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
-	// we get the file from result object 
-	final file = result.files.first; 
+  if (pickedFile != null) {
+    final imageBytes = await pickedFile.readAsBytes();
+    final base64Image = base64.encode(imageBytes);
 
-	_openFile(file); 
+    final json = {'image': base64Image};
+    final response = await http.post(
+      Uri.parse('http://0.0.0.0:8000/get_result/'),
+      headers: {HttpHeaders.contentTypeHeader: 'application/json'},
+      body: jsonEncode(json),
+    );
+
+    if (response.statusCode == 200) {
+      print('Image uploaded successfully!');
+    } else {
+      print('Failed to upload image.');
+    }
+  }
 }
 
 
@@ -156,7 +176,7 @@ class CVModel extends StatelessWidget {
                             height: 45,
                             minWidth: 130,
                             child: const Text(
-                              "Ваши файлы",
+                              "База Данных устройства",
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
@@ -169,7 +189,7 @@ class CVModel extends StatelessWidget {
                           padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
                           child: MaterialButton(
                             onPressed: () {
-                              _pickFile();
+                              uploadImage();
                             },
                             color: const Color(0xff5c6d75),
                             elevation: 0,
@@ -181,7 +201,7 @@ class CVModel extends StatelessWidget {
                             height: 45,
                             minWidth: 130,
                             child: const Text(
-                              "База Данных",
+                              "Ваши файлы",
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,

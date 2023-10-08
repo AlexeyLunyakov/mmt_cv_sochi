@@ -15,7 +15,8 @@ app = FastAPI(title="Recognition of railway car numbers")
 
 
 origins = [
-    "http://localhost:3000",
+    # "http://localhost:3000",
+    "*",
 ]
 
 app.add_middleware(
