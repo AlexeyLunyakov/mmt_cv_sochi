@@ -12,41 +12,83 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 // import 'package:file_picker/file_picker.dart'; 
 // import 'package:open_file/open_file.dart';
 
-
-// void _openFile(PlatformFile file) { 
-// 	OpenFile.open(file.path); 
-// }
-
-// void _pickFile() async { 
-// 	final result = await FilePicker.platform.pickFiles(allowMultiple: true); 
-// 	if (result == null) return; 
-// 	final file = result.files.first; 
-// 	_openFile(file); 
-// }
-
-// Выбор изображения
+// // Выбор изображения
 Future<void> uploadImage() async {
   final picker = ImagePicker();
-  final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+  List<XFile>? imageFileList = [];
 
-  if (pickedFile != null) {
-    final imageBytes = await pickedFile.readAsBytes();
-    final base64Image = base64.encode(imageBytes);
-
-    final json = {'image': base64Image};
-    final response = await http.post(
-      Uri.parse('http://172.20.192.1:8080/get_result/'),
+  final List<XFile>? selectedImages = await picker.pickMultiImage();
+  if (selectedImages!.isNotEmpty) {
+      imageFileList.addAll(selectedImages);
+  }
+  List<String>? base64list = [];
+  for (var i = 0; i < imageFileList.length; i++) {
+    // print(imageFileList[i]);
+    final imageBytes1 = await imageFileList[i].readAsBytes();
+    final base64Image1 = base64.encode(imageBytes1);
+    base64list.add(base64Image1);
+  }
+  // for (var i = 0; i < base64list.length; i++) {
+  //   print(base64list[i]);
+  //   print('\n\n\n\n new object \n\n\n\n');
+  // }
+  final json = {'files': base64list};
+  final response = await http.post(
+      Uri.parse('http://172.20.192.1:8080/text'),
+      // headers: {HttpHeaders.contentTypeHeader: 'multipart/form-data'},
       headers: {HttpHeaders.contentTypeHeader: 'application/json'},
       body: jsonEncode(json),
     );
-
-    if (response.statusCode == 200) {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+      if (response.statusCode == 200) {
       print('Image uploaded successfully!');
     } else {
       print('Failed to upload image.');
     }
-  }
+
+  // if (pickedFile != null) {
+  //   final imageBytes = await pickedFile.readAsBytes();
+  //   final base64Image = base64.encode(imageBytes);
+  //   print(pickedFile);
+  //   final json = {'files': base64Image};
+    // print(base64Image);
+    // final json = {'text': "hsdofhskjdf"};
+    // final response = await http.post(
+    //   Uri.parse('http://172.20.192.1:8080/text'),
+    //   // headers: {HttpHeaders.contentTypeHeader: 'multipart/form-data'},
+    //   headers: {HttpHeaders.contentTypeHeader: 'application/json'},
+    //   body: jsonEncode(json),
+    // );
+
+    // if (response.statusCode == 200) {
+    //   print('Image uploaded successfully!');
+    // } else {
+    //   print('Failed to upload image.');
+    // }
+  // }
 }
+
+// Future<void> sendFilesToServer() async {
+//   late List<File> newfiles;
+//   FilePickerResult? result = await FilePicker.platform.pickFiles(allowMultiple: true);  
+//   if (result != null) {
+//     newfiles = result.paths.map((path) => File(path!)).toList();
+//     print(newfiles);
+//   } else {
+//     // User canceled the picker
+//   }
+
+//   var request = http.MultipartRequest('POST', Uri.parse('http://172.20.192.1:8080/get_result'));
+//   // request.files.addAll(newfiles);
+
+//   var response = await request.send();
+
+//   if (response.statusCode == 200) {
+//     print('Files uploaded successfully');
+//   } else {
+//     print('Error uploading files');
+//   }
+// }
 
 
 class CVModel extends StatelessWidget {
@@ -191,6 +233,7 @@ class CVModel extends StatelessWidget {
                           child: MaterialButton(
                             onPressed: () {
                               uploadImage();
+                              // sendFilesToServer();
                             },
                             color: const Color(0xff5c6d75),
                             elevation: 0,
