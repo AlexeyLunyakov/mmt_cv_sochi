@@ -55,13 +55,10 @@ def startup_event():
 def send_text(value: CheckText):
     return {'data': value}
 
-
-@app.post('/test')
-def to_zip(session_id):
-    zip_subdir = os.path.join("swans", str(session_id))
+def to_zip(path: str):
     zip_io = io.BytesIO()
     with ZipFile(zip_io, mode='w', compression=ZIP_DEFLATED) as temp_zip:
-        for root, _, files in os.walk(zip_subdir):
+        for root, _, files in os.walk(path):
             for fileName in files:
                 temp_zip.write(os.path.join(root, fileName), fileName) # первый параметр отвечает за то, какой файл выбрать, а второй, как он будет называться
     return StreamingResponse(
@@ -95,4 +92,4 @@ def main_64(file: Image64, background: BackgroundTasks):
     with open(os.path.join(path_crops, 'data.txt'), 'w') as outfile:
         json.dump(json_ans, outfile)
     background.add_task(remove_file, path_crops)
-    return to_zip(session_id)
+    return to_zip(path_crops)
