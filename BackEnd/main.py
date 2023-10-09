@@ -61,6 +61,7 @@ def to_zip(path: str):
         for root, _, files in os.walk(path):
             for fileName in files:
                 temp_zip.write(os.path.join(root, fileName), fileName) # первый параметр отвечает за то, какой файл выбрать, а второй, как он будет называться
+                # temp_zip.write(os.path.join(root, fileName), os.path.join('response', fileName))
     return StreamingResponse(
         iter([zip_io.getvalue()]), 
         media_type="application/x-zip-compressed", 
@@ -76,7 +77,7 @@ def remove_file(path: str) -> None:
 @app.post('/get_result_64')
 def main_64(file: Image64, background: BackgroundTasks):
     session_id = uuid4()
-    path_crops = os.path.join('swans', str(session_id))
+    path_crops = os.path.join('swans')
     images = file.files
     json_ans = {"data": []}
     for i, file in enumerate(images):

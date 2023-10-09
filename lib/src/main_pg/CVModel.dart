@@ -8,6 +8,7 @@ import 'package:mmt_cv_sochi/src/main_pg/Left_Menu.dart';
 import 'package:mmt_cv_sochi/src/main_pg/MEGAMEN.dart';
 import 'package:mmt_cv_sochi/src/main_pg/Uploaded_files.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:archive/archive.dart';
 
 // // Выбор изображения
 class Data {
@@ -32,10 +33,35 @@ class  _CVModelState extends State<CVModel>{
   final _pageController = PageController();
   late var newDataList = [];
   List<String> images = [
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTIZccfNPnqalhrWev-Xo7uBhkor57_rKbkw&usqp=CAU",
-    "https://wallpaperaccess.com/full/2637581.jpg"
+    // "./assets/images/small_round.png"
   ];
   bool flag = false;
+
+  Future<void> unzipFileFromResponse(List<int> responseBody) async {
+    final archive = ZipDecoder().decodeBytes(responseBody);
+    for (final file in archive) {
+      final filename = file.name;
+      if (file.isFile) {
+        print("test file");
+        print(filename);
+        final data = file.content as List<int>;
+        if (filename.contains('.jpg') || filename.contains('.png')) {
+          File('./responce/$filename')
+          ..createSync(recursive: true)
+          ..writeAsBytesSync(data);
+          images.add('./responce/$filename');
+        }
+        else {
+          File('responce/$filename')
+          ..createSync(recursive: true)
+          ..writeAsBytesSync(data);
+        }
+      } else {
+        print("test dir");
+        await Directory('responce/$filename').create(recursive: true);
+      }
+    }
+  }
 
   Future<void> uploadImage() async {
     final picker = ImagePicker();
@@ -58,11 +84,14 @@ class  _CVModelState extends State<CVModel>{
       );
       if (response.statusCode == 200) {
         print('Image(s) uploaded successfully!');
-        final responceMap = jsonDecode(response.body);
+        // print(response.body);
+        unzipFileFromResponse(response.bodyBytes);
+        const path = "./responce/data.txt";
+        File dataFile = File(path);
+        String dataString = dataFile.readAsStringSync();
+        final responceMap = jsonDecode(dataString);
         List<dynamic> dataMap = jsonDecode(jsonEncode(responceMap["data"]));
         List<List> dataList = dataMap.map((element) => [element['file_name'], element['pred_class']]).toList();
-        String resString = jsonEncode(dataList);
-        // print(resString);
         setState(() {
           flag = true;
           newDataList = dataList;
@@ -222,6 +251,7 @@ class  _CVModelState extends State<CVModel>{
                                   //   print("testing");
                                   //   print(newDataList);
                                   // }
+                                  print(images);
                                   _emptyfunc();
                                 },
                                 color: const Color(0xff5c6d75),
@@ -271,7 +301,7 @@ class  _CVModelState extends State<CVModel>{
                           controller: _pageController ,
                           scrollDirection: Axis.horizontal,
                           itemCount: images.length,
-                          itemBuilder: (context, position) {
+                          itemBuilder: (context, index) {
                             return Align(
                               alignment: Alignment.topCenter,
                               child: Padding(
@@ -279,11 +309,13 @@ class  _CVModelState extends State<CVModel>{
                                     vertical: 16, horizontal: 0),
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(5.0),
-                                  child:Image.network(images[position],
-                                      height: 200,
-                                      width: MediaQuery.of(context).size.width,
-                                      fit: BoxFit.contain,
-                                  )),
+                                  child:
+                                      Image.file(File(images[index]),
+                                        height: 200,
+                                        width: MediaQuery.of(context).size.width,
+                                        fit: BoxFit.contain,
+                                      )),
+                                    
                                   // child: Image.asset(
                                   //   "assets/images/Untitled-1.png",
                                   //   height: 200,
@@ -397,7 +429,7 @@ class  _CVModelState extends State<CVModel>{
                                   children: [
                                       SizedBox(
                                         height: 200,
-                                        width: 100,
+                                        width: 120,
                                         child: ListView.builder(
                                           itemCount: newDataList.length,
                                           itemBuilder: (BuildContext context, int index) {
@@ -421,7 +453,7 @@ class  _CVModelState extends State<CVModel>{
                                   children: [
                                       SizedBox(
                                         height: 200,
-                                        width: 100,
+                                        width: 120,
                                         child: ListView.builder(
                                           itemCount: newDataList.length,
                                           itemBuilder: (BuildContext context, int index) {

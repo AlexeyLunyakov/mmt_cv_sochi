@@ -41,6 +41,9 @@ flutter:
     - assets/images/egor.png
     - assets/images/alexandr.png
     - assets/images/alex.png
+    - assets/images/
+    # - assets/images/model
+
 
   # fonts:
   #   - family: Schyler
