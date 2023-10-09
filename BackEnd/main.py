@@ -29,9 +29,11 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["GET", "POST", "OPTIONS", "DELETE", "PATCH", "PUT"],
-    allow_headers=["Content-Type", "Set-Cookie", "Access-Control-Allow-Headers", "Access-Control-Allow-Origin",
-                   "Authorization"],
+    # allow_methods=["GET", "POST", "OPTIONS", "DELETE", "PATCH", "PUT"],
+    # allow_headers=["Content-Type", "Set-Cookie", "Access-Control-Allow-Headers", "Access-Control-Allow-Origin",
+    #                "Authorization"],
+    allow_methods=["*",],
+    allow_headers=["*",],
 )
 
 
@@ -71,4 +73,9 @@ def main_64(file: Image64):
         results = yolo.predict(image)
         print(results)
         for el in results:
-            el.save_crop(f"C:\\Users\\kalin\\Desktop\\Hacatons\\mmt_cv_sochi\\BackEnd\\swans\\{session_id}\\")
+            el.save_crop(f"swans\\crops")
+    return {"data": [{"file_name": "fil1","pred_class": "8901"},
+    {"file_name": "fil2","pred_class": "8902"},
+    {"file_name": "fil3","pred_class": "8903"},
+    {"file_name": "fil4","pred_class": "8901"},
+    {"file_name": "fil5","pred_class": "8903"}]}

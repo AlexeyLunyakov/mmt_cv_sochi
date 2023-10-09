@@ -185,6 +185,7 @@ class Login extends StatelessWidget {
                         onPressed: () {
                           Navigator.push(
                             context,
+                            // MaterialPageRoute(builder: (context) => CVModel(newDataList: [],)),
                             MaterialPageRoute(builder: (context) => CVModel()),
                           );
                         },

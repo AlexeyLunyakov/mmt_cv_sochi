@@ -261,7 +261,9 @@ class ChangePass extends StatelessWidget {
                         // что-то еще для подтверждения
                         Navigator.push(
                           context,
+                          // MaterialPageRoute(builder: (context) => CVModel(newDataList: [],)),
                           MaterialPageRoute(builder: (context) => CVModel()),
+                          
                         );
                       },
                       color: const Color(0xffd8fbe9),

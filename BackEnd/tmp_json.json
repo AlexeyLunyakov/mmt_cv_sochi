@@ -1,0 +1,16 @@
+{
+    "data": [
+    {
+      "file_name": "fil1",
+      "pred_class": "8901"
+    },
+    {
+        "file_name": "fil2",
+        "pred_class": "8902"
+    },
+    {
+        "file_name": "fil3",
+        "pred_class": "8903"
+    }
+  ]
+}
