@@ -1,14 +1,20 @@
 from typing import List
-from fastapi import FastAPI, Form, UploadFile
+import io
+from time import sleep
+from uuid import uuid4
+import os
+import base64
+from zipfile import ZipFile, ZIP_DEFLATED
+from shutil import rmtree
+import json
+from pydantic import BaseModel
+from fastapi import BackgroundTasks, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
 from ml.classiffier import Classifier
 from ultralytics import YOLO
 from PIL import Image
-import io
-from uuid import uuid4
-import os
-from pydantic import BaseModel
-import base64
+
 
 yolo = None
 classifier = None
@@ -44,38 +50,49 @@ def startup_event():
     classifier = Classifier()
     classifier.get_model_from_file(os.path.join('ml', 'classifier_efficient_net_95-8acc.pt'))
 
+
 @app.post('/text')
 def send_text(value: CheckText):
     return {'data': value}
 
-@app.post('/get_result')
-def main(files: List[UploadFile]):
-    for file in files:
-        session_id = uuid4()
-        image = Image.open(io.BytesIO(file.file.read()))
-        # image = transforms.ToTensor()(image)
-        results = yolo.predict(image)
-        for el in results:
-            el.save_crop(f"swans/{session_id}/")
-        # image = decode_image(frombuffer(file.file.read()))
-    return {"data": ['bewick', 'is', 'good']}
+
+@app.post('/test')
+def to_zip(session_id):
+    zip_subdir = os.path.join("swans", str(session_id))
+    zip_io = io.BytesIO()
+    with ZipFile(zip_io, mode='w', compression=ZIP_DEFLATED) as temp_zip:
+        for root, _, files in os.walk(zip_subdir):
+            for fileName in files:
+                temp_zip.write(os.path.join(root, fileName), fileName) # первый параметр отвечает за то, какой файл выбрать, а второй, как он будет называться
+    return StreamingResponse(
+        iter([zip_io.getvalue()]), 
+        media_type="application/x-zip-compressed", 
+        headers = { "Content-Disposition": f"attachment; filename=images.zip"}
+    )
+
+
+def remove_file(path: str) -> None:
+    sleep(10)
+    rmtree(path)
 
 
 @app.post('/get_result_64')
-def main_64(file: Image64):
+def main_64(file: Image64, background: BackgroundTasks):
+    session_id = uuid4()
+    path_crops = os.path.join('swans', str(session_id))
     images = file.files
-    for file in images:
-        session_id = uuid4()
+    json_ans = {"data": []}
+    for i, file in enumerate(images):
         image_as_bytes = str.encode(file)  # convert string to bytes
         img_recovered = base64.b64decode(image_as_bytes)  # decode base64string
         image = Image.open(io.BytesIO(img_recovered))
-        # image = transforms.ToTensor()(image)
         results = yolo.predict(image)
         print(results)
         for el in results:
-            el.save_crop(f"swans\\crops")
-    return {"data": [{"file_name": "fil1","pred_class": "8901"},
-    {"file_name": "fil2","pred_class": "8902"},
-    {"file_name": "fil3","pred_class": "8903"},
-    {"file_name": "fil4","pred_class": "8901"},
-    {"file_name": "fil5","pred_class": "8903"}]}
+            el.save_crop(path_crops)
+        predict = 'something'
+        json_ans['data'].append({"file_name" : f"file_{i+1}", "pred_class" : predict})
+    with open(os.path.join(path_crops, 'data.txt'), 'w') as outfile:
+        json.dump(json_ans, outfile)
+    background.add_task(remove_file, path_crops)
+    return to_zip(session_id)
